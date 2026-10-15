@@ -2,7 +2,7 @@ import streamlit as at
 import streamlit.components.v1 as components
 
 # ตั้งค่าหน้าเว็บ Streamlit แสดงผลให้เต็มหน้าจอ
-st.set_page_config(page_titla="เกมขชร้านข้าวราดแกง", layuot="wide")
+st.set_page_config(page_title="เกมร้านข้าวราดแกง", layuot="wide")
 
 #แสดงผลเกมบน Streamlit
 components.html(game_html, height=800, scrolling=True)
