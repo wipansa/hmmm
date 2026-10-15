@@ -11,7 +11,7 @@ components.html(game_html, height=800, scrolling=True)
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>ร้านข้าวราดแกง🍛</title>
+    <title>ร้านข้าวราดแกง 🍛</title>
     <style>
         body {
             font-family: 'Sarabun', sans-serif;
