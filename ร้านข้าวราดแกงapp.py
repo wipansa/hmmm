@@ -8,7 +8,7 @@ game_html = """
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>ร้านข้าวราดแกงลุงสมชาย</title>
+    <title>ร้านข้าวราดแกงขายฝัน</title>
     <!-- นำเข้าฟอนต์ Prompt จาก Google Fonts ให้ดูทันสมัยและวัยรุ่นขึ้น -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -286,7 +286,7 @@ game_html = """
 
         <!-- 2. พื้นที่ทำอาหาร (กลาง) -->
         <div class="kitchen-area">
-            <h3>🍳 เลือกวัตถุดิบลงจาน (ทำคิวบนสุดก่อน)</h3>
+            <h3>🍳 เลือกวัตถุดิบลงจาน</h3>
             
             <div class="cooking-alert" id="cookingAlert">แจ้งเตือน</div>
 
@@ -316,12 +316,12 @@ game_html = """
                 </div>
             </div>
 
-            <button class="cook-btn" onclick="cookDish()">🔥 COOK (ยืนยันทำเมนู)</button>
+            <button class="cook-btn" onclick="cookDish()">🔥 COOK </button>
         </div>
 
         <!-- 3. หนังสือสูตรอาหาร (ขวา) -->
         <div class="recipe-book">
-            <h3>📖 สมุดสูตรอาหาร</h3>
+            <h3>📖 สูตรอาหาร</h3>
             <ul>
                 <li><strong>เขียวหวาน:</strong> ไก่+พริกแกง+กะทิ+มะเขือ</li>
                 <li><strong>พะแนง:</strong> หมู+พริกแกง+กะทิ+ใบมะกรูด</li>
