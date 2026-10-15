@@ -11,7 +11,7 @@ components.html(game_html, height=800, scrolling=True)
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>ร้านข้าวราดแกง 🍛</title>
+    <title>ร้านข้าวราดแกงขายฝัน</title>
     <style>
         body {
             font-family: 'Sarabun', sans-serif;
@@ -159,7 +159,7 @@ components.html(game_html, height=800, scrolling=True)
 </head>
 <body>
 
-    <h1>ร้านข้าวราดแกง 🍛</h1>
+    <h1>ร้านข้าวราดแกงขายฝัน</h1>
 
     <div class="game-container">
         <div class="orders-area" id="ordersArea"></div>
