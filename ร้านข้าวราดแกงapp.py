@@ -8,13 +8,13 @@ game_html = """
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>ข้าวราดแกงขายฝัน</title>
-    <!-- นำเข้าฟอนต์ Prompt (หลัก), Mali, Srisakdi, Charm, Kalam, Caveat (ลายมือ) จาก Google Fonts -->
+    <title>ร้านข้าวราดแกงลุงสมชาย</title>
+    <!-- ฟอนต์ Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Charm:wght@700&family=Kalam:wght@700&family=Mali:ital,wght@0,500;0,700;1,500&family=Prompt:wght@400;500;600;700&family=Srisakdi:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Prompt', sans-serif;
-            background-color: #f7f3ed; /* โทนสีครีมอุ่นแบบ Cozy */
+            background-color: #f7f3ed;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -33,7 +33,7 @@ game_html = """
         }
         h1 { color: #5d4037; margin: 0; font-size: 26px; font-weight: 700; text-align: center; }
 
-        /* ป้ายเปิด-ปิดทรงสี่เหลี่ยม มินิมอล Cozy */
+        /* ป้ายเปิด-ปิดทรงสี่เหลี่ยม */
         .shop-status-btn {
             padding: 8px 22px;
             font-size: 14px;
@@ -51,7 +51,7 @@ game_html = """
         .game-container {
             display: flex;
             gap: 20px;
-            width: 1000px;
+            width: 1050px;
             position: relative;
         }
 
@@ -63,7 +63,6 @@ game_html = """
             width: 230px;
         }
 
-        /* ใบออเดอร์กระดาษโน้ต Cozy */
         .order-box {
             background: #fffdf7;
             border: 1px solid #e0d7c6;
@@ -79,7 +78,6 @@ game_html = """
         .order-box h3 { margin-top: 0; color: #6d4c41; font-size: 15px; font-weight: 600; }
         .order-list { list-style: none; padding: 0; margin: 0 0 10px 0; }
         
-        /* สไตล์ข้อความเมนูลายมือลูกค้า */
         .order-item { 
             font-size: 16px; 
             margin-bottom: 6px; 
@@ -87,7 +85,6 @@ game_html = """
             line-height: 1.3;
         }
         
-        /* สุ่มลายมือลูกค้าต่างกันในแต่ละเมนู */
         .handwrite-1 { font-family: 'Mali', cursive; font-weight: 700; }
         .handwrite-2 { font-family: 'Charm', cursive; font-size: 17px; }
         .handwrite-3 { font-family: 'Srisakdi', cursive; font-size: 17px; }
@@ -122,10 +119,10 @@ game_html = """
             cursor: not-allowed;
         }
         .serve-btn.active {
-            background: #aed581;
-            color: #33691e;
+            background: #81c784;
+            color: #1b5e20;
             cursor: pointer;
-            box-shadow: 0 3px 6px rgba(174, 213, 129, 0.4);
+            box-shadow: 0 3px 6px rgba(129, 199, 132, 0.4);
         }
 
         .order-alert {
@@ -146,6 +143,7 @@ game_html = """
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
         }
         .kitchen-area h3 { margin-top: 0; color: #4e342e; font-size: 15px; font-weight: 600; }
 
@@ -158,8 +156,8 @@ game_html = """
         }
 
         .plate-box {
-            width: 75px;
-            height: 75px;
+            width: 80px;
+            height: 80px;
             border: 2px dashed #bcaaa4;
             border-radius: 50%;
             display: flex;
@@ -171,6 +169,20 @@ game_html = """
             padding: 5px;
             box-sizing: border-box;
             text-align: center;
+            position: relative;
+        }
+
+        /* เอฟเฟกต์ควันจากการผัดร้อนๆ */
+        .smoke-effect {
+            position: absolute;
+            top: -15px;
+            font-size: 16px;
+            animation: floatUp 1s infinite alternate;
+            display: none;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.9); opacity: 0.6; }
+            100% { transform: translateY(-8px) scale(1.2); opacity: 1; }
         }
 
         .dish-box {
@@ -249,9 +261,9 @@ game_html = """
         }
         .cook-btn:hover { background: #bcaaa4; }
 
-        /* 3. หนังสือสูตรอาหาร (ขวา) - ลายมือสมุดบันทึก Cozy */
+        /* 3. หนังสือสูตรอาหาร (ขวา) - ปรับบรรทัดเดียว */
         .recipe-book {
-            width: 220px;
+            width: 280px;
             background: #fffde7;
             border: 1px solid #fff59d;
             padding: 15px;
@@ -261,8 +273,13 @@ game_html = """
             font-family: 'Mali', cursive;
         }
         .recipe-book h3 { margin-top: 0; color: #f57f17; font-size: 16px; font-weight: 700; }
-        .recipe-book ul { padding-left: 15px; margin: 0; font-size: 13px; color: #5d4037; }
-        .recipe-book li { margin-bottom: 6px; line-height: 1.3; }
+        .recipe-book ul { padding-left: 0; list-style: none; margin: 0; font-size: 12px; color: #5d4037; }
+        .recipe-book li { 
+            margin-bottom: 6px; 
+            white-space: nowrap; /* จัดให้ข้อความอยู่ในบรรทัดเดียว */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
         /* สถานะมุมขวาล่าง */
         .status-panel {
@@ -282,6 +299,56 @@ game_html = """
         }
         .fame-box { background: #ffb74d; }
         .money-box { background: #81c784; }
+
+        /* 4. หน้าต่างสรุปผลเมื่อปิดร้าน (Modal) */
+        .summary-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(3px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .summary-card {
+            background: #fffefb;
+            border: 3px solid #8d6e63;
+            border-radius: 16px;
+            padding: 25px 35px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            font-family: 'Prompt', sans-serif;
+        }
+        .summary-card h2 { color: #5d4037; margin-top: 0; margin-bottom: 15px; font-size: 22px; }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #4e342e;
+            border-bottom: 1px dashed #efebe9;
+            padding-bottom: 5px;
+        }
+        .summary-total {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-top: 15px;
+            border-bottom: none;
+        }
+        .close-summary-btn {
+            margin-top: 18px;
+            padding: 8px 25px;
+            background: #8d6e63;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .close-summary-btn:hover { background: #6d4c41; }
     </style>
 </head>
 <body>
@@ -297,7 +364,7 @@ game_html = """
 
         <!-- 2. พื้นที่ทำอาหาร (กลาง) -->
         <div class="kitchen-area">
-            <h3>🍳 เลือกวัตถุดิบลงจาน</h3>
+            <h3>🍳 วัตถุดิบ</h3>
             
             <div class="cooking-alert" id="cookingAlert">แจ้งเตือน</div>
 
@@ -320,7 +387,10 @@ game_html = """
             </div>
 
             <div class="top-kitchen-row" style="width: 100%;">
-                <div class="plate-box" id="plateEmojis" title="จานข้าว">🍽️</div>
+                <div class="plate-box" id="plateBox" title="จานข้าว">
+                    <div class="smoke-effect" id="smokeEffect">♨️</div>
+                    <span id="plateEmojis">🍽️</span>
+                </div>
                 <div class="dish-box">
                     <strong>วัตถุดิบที่เลือก:</strong> <span id="currentSelection" style="color: #a1887f;">- คลิกเลือกวัตถุดิบ -</span><br>
                     <div id="selectedTagsContainer" style="margin-top: 4px;"></div>
@@ -330,18 +400,18 @@ game_html = """
             <button class="cook-btn" onclick="cookDish()">🔥 COOK</button>
         </div>
 
-        <!-- 3. หนังสือสูตรอาหาร (ขวา) -->
+        <!-- 3. หนังสือสูตรอาหาร (ขวา) - บรรทัดเดียว -->
         <div class="recipe-book">
             <h3>📖 สูตรอาหาร</h3>
             <ul>
-                <li><strong>เขียวหวาน:</strong> ไก่+พริกแกง+กะทิ+มะเขือ</li>
-                <li><strong>พะแนง:</strong> หมู+พริกแกง+กะทิ+ใบมะกรูด</li>
-                <li><strong>ต้มยำกุ้ง:</strong> กุ้ง+น้ำซุป+เห็ด+สมุนไพร</li>
-                <li><strong>ต้มจืด:</strong> เต้าหู้+น้ำซุป+ผักกาดขาว</li>
-                <li><strong>ผัดกะเพรา:</strong> หมู+ใบกะเพรา</li>
-                <li><strong>ไข่พะโล้:</strong> หมู+ไข่+เต้าหู้</li>
-                <li><strong>ผัดพริกแกง:</strong> หมู+พริกแกง+ใบมะกรูด</li>
-                <li><strong>หมูกระเทียม:</strong> หมู+กระเทียม+สมุนไพร</li>
+                <li><strong>เขียวหวาน:</strong> ไก่ + พริกแกง + กะทิ + มะเขือ</li>
+                <li><strong>พะแนง:</strong> หมู + พริกแกง + กะทิ + ใบมะกรูด</li>
+                <li><strong>ต้มยำกุ้ง:</strong> กุ้ง + น้ำซุป + เห็ด + สมุนไพร</li>
+                <li><strong>ต้มจืด:</strong> เต้าหู้ + น้ำซุป + ผักกาดขาว</li>
+                <li><strong>ผัดกะเพรา:</strong> หมู + ใบกะเพรา</li>
+                <li><strong>ไข่พะโล้:</strong> หมู + ไข่ + เต้าหู้</li>
+                <li><strong>ผัดพริกแกง:</strong> หมู + พริกแกง + ใบมะกรูด</li>
+                <li><strong>หมูกระเทียม:</strong> หมู + กระเทียม + สมุนไพร</li>
             </ul>
         </div>
 
@@ -352,7 +422,59 @@ game_html = """
         </div>
     </div>
 
+    <!-- 4. หน้าต่างสรุปยอดประจำวัน -->
+    <div class="summary-modal" id="summaryModal">
+        <div class="summary-card">
+            <h2>📊 สรุปยอดขายวันนี้</h2>
+            <div class="summary-row"><span>รายได้ทั้งหมด:</span><span id="sumRevenue">0 บาท</span></div>
+            <div class="summary-row"><span>ค่าวัตถุดิบ:</span><span id="sumCosts">0 บาท</span></div>
+            <div class="summary-row summary-total"><span>กำไรสุทธิ:</span><span id="sumProfit">0 บาท</span></div>
+            <div class="summary-row" style="margin-top:10px;"><span>เสิร์ฟสำเร็จ:</span><span id="sumServed">0 ออเดอร์</span></div>
+            <div class="summary-row"><span>ดาวความนิยม:</span><span id="sumStars">⭐ 5.0</span></div>
+            <button class="close-summary-btn" onclick="closeSummaryModal()">ตกลง</button>
+        </div>
+    </div>
+
     <script>
+        // ระบบเสียงสังเคราะห์เสมือนจริง (Web Audio API)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'click') {
+                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.05);
+            } else if (type === 'cook') {
+                // เสียงซู่ทำอาหาร
+                let bufferSize = audioCtx.sampleRate * 0.3;
+                let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                let data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+                let noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+                let noiseGain = audioCtx.createGain();
+                noiseGain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                noiseGain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                noise.connect(noiseGain);
+                noiseGain.connect(audioCtx.destination);
+                noise.start();
+            } else if (type === 'serve') {
+                // เสียงกระดิ่งเสิร์ฟสำเร็จ
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+            }
+        }
+
         const ingredientCosts = {
             "ไก่": 12, "หมู": 15, "กุ้ง": 25, "พริกแกง": 8, "กะทิ": 10,
             "น้ำซุป": 5, "ใบกะเพรา": 5, "มะเขือเปราะ": 6, "ใบมะกรูด": 4,
@@ -382,16 +504,26 @@ game_html = """
         let orderAlerts = {};
         let nextOrderTimer = 15;
 
+        // ตัวแปรสถิติสำหรับสรุปผลประจำวัน
+        let dailyRevenue = 0;
+        let dailyCosts = 0;
+        let dailyServedCount = 0;
+
         function toggleShopStatus() {
             isGameOpen = !isGameOpen;
             const btn = document.getElementById("shopBtn");
             if (isGameOpen) {
                 btn.className = "shop-status-btn open";
-                btn.innerText = "เปิด";
+                btn.innerText = "OPEN (เปิดร้านแล้ว)";
+                // รีเซ็ตสถิติประจำวันใหม่เมื่อเปิดร้าน
+                dailyRevenue = 0;
+                dailyCosts = 0;
+                dailyServedCount = 0;
                 if (orders.length === 0) addNewOrder();
             } else {
                 btn.className = "shop-status-btn close";
-                btn.innerText = "ปิด";
+                btn.innerText = "CLOSE (ร้านปิด)";
+                showSummaryModal(); // แสดงป๊อปอัพสรุปผลเมื่อปิดร้าน
             }
             updateUI();
         }
@@ -403,7 +535,6 @@ game_html = """
             while (selectDishes.length < numDish) {
                 let randomDish = recipeKeys[Math.floor(Math.random() * recipeKeys.length)];
                 if (!selectDishes.map(d => d.name).includes(randomDish)) {
-                    // สุ่มฟอนต์ลายมือเฉพาะสำหรับแต่ละเมนูของลูกค้า
                     let fontClass = handwriteClasses[Math.floor(Math.random() * handwriteClasses.length)];
                     selectDishes.push({ name: randomDish, font: fontClass });
                 }
@@ -467,12 +598,14 @@ game_html = """
                 showCookingAlert("⚠️ กรุณากดเปิดร้านก่อนเริ่มทำอาหาร!");
                 return;
             }
+            playSound('click');
             selectedIngredients.push(ing);
             selectedEmojis.push(emoji);
             updateUI();
         }
 
         function removeSelectedIngredient(index) {
+            playSound('click');
             let removedIng = selectedIngredients.splice(index, 1)[0];
             selectedEmojis.splice(index, 1);
             showCookingAlert(`ยกเลิกวัตถุดิบ "${removedIng}"`);
@@ -493,6 +626,13 @@ game_html = """
                 return;
             }
 
+            playSound('cook');
+
+            // เอฟเฟกต์ควัน
+            const smoke = document.getElementById("smokeEffect");
+            smoke.style.display = "block";
+            setTimeout(() => { smoke.style.display = "none"; }, 1200);
+
             let matchedDish = null;
             for (let [dish, data] of Object.entries(recipes)) {
                 if (data.ingredients.length === selectedIngredients.length) {
@@ -507,6 +647,7 @@ game_html = """
             let totalCost = 0;
             selectedIngredients.forEach(ing => { totalCost += (ingredientCosts[ing] || 0); });
             score -= totalCost;
+            dailyCosts += totalCost; // สะสมค่าวัตถุดิบประจำวัน
 
             if (matchedDish) {
                 const currentOrder = orders[0];
@@ -529,6 +670,8 @@ game_html = """
         function serveOrder(index) {
             if (index !== 0) return;
 
+            playSound('serve');
+
             let currentOrder = orders[0];
             let numberOfDishes = currentOrder.dishes.length;
 
@@ -538,6 +681,8 @@ game_html = """
 
             let totalPrice = basePrice + extraTotal;
             score += totalPrice;
+            dailyRevenue += totalPrice; // สะสมรายได้ประจำวัน
+            dailyServedCount++;         // สะสมจำนวนออเดอร์
 
             let fameGain = numberOfDishes * 4;
             fame = Math.min(100, fame + fameGain);
@@ -554,6 +699,23 @@ game_html = """
             alertBox.innerText = msg;
             alertBox.style.display = "block";
             setTimeout(() => { alertBox.style.display = "none"; }, 4000);
+        }
+
+        function showSummaryModal() {
+            let starCount = ((fame / 100) * 5).toFixed(1);
+            let profit = dailyRevenue - dailyCosts;
+
+            document.getElementById("sumRevenue").innerText = `${dailyRevenue} บาท`;
+            document.getElementById("sumCosts").innerText = `${dailyCosts} บาท`;
+            document.getElementById("sumProfit").innerText = `${profit} บาท`;
+            document.getElementById("sumServed").innerText = `${dailyServedCount} ออเดอร์`;
+            document.getElementById("sumStars").innerText = `⭐ ${starCount} (${fame}%)`;
+
+            document.getElementById("summaryModal").style.display = "flex";
+        }
+
+        function closeSummaryModal() {
+            document.getElementById("summaryModal").style.display = "none";
         }
 
         function updateUI() {
