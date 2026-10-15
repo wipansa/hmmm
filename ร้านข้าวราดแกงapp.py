@@ -8,13 +8,13 @@ game_html = """
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>ร้านข้าวราดแกงขายฝัน</title>
-    <!-- นำเข้าฟอนต์ Prompt จาก Google Fonts ให้ดูทันสมัยและวัยรุ่นขึ้น -->
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>ข้าวราดแกงขายฝัน</title>
+    <!-- นำเข้าฟอนต์ Prompt (หลัก), Mali, Srisakdi, Charm, Kalam, Caveat (ลายมือ) จาก Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Charm:wght@700&family=Kalam:wght@700&family=Mali:ital,wght@0,500;0,700;1,500&family=Prompt:wght@400;500;600;700&family=Srisakdi:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Prompt', sans-serif;
-            background-color: #fdfbf7;
+            background-color: #f7f3ed; /* โทนสีครีมอุ่นแบบ Cozy */
             margin: 0;
             padding: 20px;
             display: flex;
@@ -22,32 +22,31 @@ game_html = """
             align-items: center;
         }
 
-        /* กรอบชื่อร้านสไตล์ไทยโมเดิร์น */
+        /* กรอบชื่อร้านสไตล์ไม้ Cozy */
         .shop-title-box {
-            border: 3px solid #d35400;
-            background: #fff5e6;
-            padding: 8px 30px;
-            border-radius: 12px;
-            box-shadow: 3px 3px 0px #b9770e;
+            border: 2px solid #8d6e63;
+            background: #fff8f0;
+            padding: 10px 35px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(141, 110, 99, 0.15);
             margin-bottom: 12px;
         }
-        h1 { color: #b9770e; margin: 0; font-size: 26px; font-weight: 700; text-align: center; text-shadow: 1px 1px 0px #fad7a0; }
+        h1 { color: #5d4037; margin: 0; font-size: 26px; font-weight: 700; text-align: center; }
 
-        /* ป้ายเปิด-ปิดทรงสี่เหลี่ยม */
+        /* ป้ายเปิด-ปิดทรงสี่เหลี่ยม มินิมอล Cozy */
         .shop-status-btn {
-            padding: 8px 20px;
-            font-size: 15px;
+            padding: 8px 22px;
+            font-size: 14px;
             font-weight: 600;
-            border: 2px solid #555;
+            border: none;
             border-radius: 8px;
             cursor: pointer;
             margin-bottom: 15px;
-            box-shadow: 2px 2px 0px #333;
-            transition: 0.1s;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            transition: 0.2s;
         }
-        .shop-status-btn:active { transform: translate(2px, 2px); box-shadow: none; }
-        .shop-status-btn.close { background: #e74c3c; color: white; }
-        .shop-status-btn.open { background: #27ae60; color: white; }
+        .shop-status-btn.close { background: #e57373; color: white; }
+        .shop-status-btn.open { background: #81c784; color: #1b5e20; }
 
         .game-container {
             display: flex;
@@ -64,61 +63,76 @@ game_html = """
             width: 230px;
         }
 
+        /* ใบออเดอร์กระดาษโน้ต Cozy */
         .order-box {
-            background: #fffdf0;
-            border: 2px solid #e67e22;
-            padding: 12px;
-            box-shadow: 3px 3px 0px rgba(230, 126, 34, 0.3);
-            border-radius: 8px;
+            background: #fffdf7;
+            border: 1px solid #e0d7c6;
+            padding: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-radius: 12px;
             position: relative;
         }
         .order-box.active-box {
-            border: 2px solid #d35400;
-            background: #fff9e6;
+            border: 2px solid #a1887f;
+            background: #fffaf0;
         }
-        .order-box h3 { margin-top: 0; color: #d35400; font-size: 14px; font-weight: 600; }
+        .order-box h3 { margin-top: 0; color: #6d4c41; font-size: 15px; font-weight: 600; }
         .order-list { list-style: none; padding: 0; margin: 0 0 10px 0; }
-        .order-item { font-size: 13px; margin-bottom: 4px; color: #555; font-weight: 400; }
-        .order-item.done { text-decoration: line-through; color: #27ae60; font-weight: 600; }
+        
+        /* สไตล์ข้อความเมนูลายมือลูกค้า */
+        .order-item { 
+            font-size: 16px; 
+            margin-bottom: 6px; 
+            color: #3e2723; 
+            line-height: 1.3;
+        }
+        
+        /* สุ่มลายมือลูกค้าต่างกันในแต่ละเมนู */
+        .handwrite-1 { font-family: 'Mali', cursive; font-weight: 700; }
+        .handwrite-2 { font-family: 'Charm', cursive; font-size: 17px; }
+        .handwrite-3 { font-family: 'Srisakdi', cursive; font-size: 17px; }
+        .handwrite-4 { font-family: 'Kalam', cursive; font-size: 17px; }
+
+        .order-item.done { text-decoration: line-through; color: #81c784; opacity: 0.8; }
 
         .timer-bar-container {
             width: 100%;
-            background: #ddd;
+            background: #efebe9;
             height: 8px;
             border-radius: 4px;
             margin-bottom: 10px;
             overflow: hidden;
-            border: 1px solid #ccc;
         }
         .timer-bar {
             height: 100%;
-            background: #e74c3c;
+            background: #dce775;
             width: 100%;
             transition: width 1s linear;
         }
 
         .serve-btn {
             width: 100%;
-            padding: 6px;
-            background: #bdc3c7;
+            padding: 7px;
+            background: #cfd8dc;
             color: #fff;
             border: none;
             font-size: 13px;
             font-weight: 600;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: not-allowed;
         }
         .serve-btn.active {
-            background: #27ae60;
+            background: #aed581;
+            color: #33691e;
             cursor: pointer;
-            box-shadow: 2px 2px 0px #1e8449;
+            box-shadow: 0 3px 6px rgba(174, 213, 129, 0.4);
         }
 
         .order-alert {
-            font-size: 11px;
-            color: #c0392b;
+            font-size: 12px;
+            color: #e57373;
             margin-top: 5px;
-            font-weight: 600;
+            font-weight: 500;
             text-align: center;
         }
 
@@ -126,15 +140,14 @@ game_html = """
         .kitchen-area {
             flex: 1;
             background: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            border: 2px solid #d5dbdb;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            padding: 22px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        .kitchen-area h3 { margin-top: 0; color: #2c3e50; font-size: 15px; font-weight: 600; }
+        .kitchen-area h3 { margin-top: 0; color: #4e342e; font-size: 15px; font-weight: 600; }
 
         .top-kitchen-row {
             display: flex;
@@ -147,14 +160,14 @@ game_html = """
         .plate-box {
             width: 75px;
             height: 75px;
-            border: 2px dashed #e67e22;
+            border: 2px dashed #bcaaa4;
             border-radius: 50%;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
             font-size: 18px;
-            background: #fcf3cf;
+            background: #fff8e1;
             padding: 5px;
             box-sizing: border-box;
             text-align: center;
@@ -162,25 +175,24 @@ game_html = """
 
         .dish-box {
             flex: 1;
-            background: #f9f9f9;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            min-height: 55px;
+            background: #fafafa;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+            min-height: 50px;
             font-size: 13px;
         }
 
         .cooking-alert {
             width: 100%;
-            background: #eafaf1;
-            color: #27ae60;
-            padding: 6px;
-            border-radius: 6px;
+            background: #f1f8e9;
+            color: #558b2f;
+            padding: 8px;
+            border-radius: 8px;
             font-size: 12px;
             font-weight: 500;
             text-align: center;
             margin-bottom: 10px;
-            border: 1px solid #a9dfbf;
             display: none;
         }
 
@@ -192,66 +204,65 @@ game_html = """
             margin-bottom: 15px;
         }
         .ing-btn {
-            padding: 7px;
-            background: #2980b9;
+            padding: 8px;
+            background: #a1887f;
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 12px;
             font-weight: 500;
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 1px 1px 0px #1b4f72;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
             transition: 0.1s;
         }
-        .ing-btn:active { transform: translate(1px, 1px); box-shadow: none; }
-        .ing-btn span { font-size: 10px; opacity: 0.9; }
+        .ing-btn:hover { background: #8d6e63; }
+        .ing-btn span { font-size: 10px; opacity: 0.85; }
 
         .selected-item-tag {
             display: inline-block;
-            background: #fadbd8;
-            color: #c0392b;
-            padding: 2px 6px;
+            background: #ffe0b2;
+            color: #e65100;
+            padding: 3px 8px;
             margin: 2px;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 11px;
             font-weight: 500;
-            border: 1px solid #f5b7b1;
         }
         .selected-item-tag:hover { text-decoration: line-through; }
 
         .cook-btn {
             width: 100%;
-            padding: 8px;
-            background: #d35400;
-            color: white;
+            padding: 10px;
+            background: #d7ccc8;
+            color: #4e342e;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 2px 2px 0px #935116;
             margin-top: 5px;
-            transition: 0.1s;
+            transition: 0.2s;
         }
-        .cook-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+        .cook-btn:hover { background: #bcaaa4; }
 
-        /* 3. หนังสือสูตรอาหาร (ขวา) */
+        /* 3. หนังสือสูตรอาหาร (ขวา) - ลายมือสมุดบันทึก Cozy */
         .recipe-book {
             width: 220px;
-            background: #fef9e7;
-            border: 2px solid #d4ac0d;
-            padding: 12px;
-            box-shadow: 3px 3px 0px rgba(212, 172, 13, 0.3);
-            border-radius: 8px;
+            background: #fffde7;
+            border: 1px solid #fff59d;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            border-radius: 12px;
             height: fit-content;
+            font-family: 'Mali', cursive;
         }
-        .recipe-book h3 { margin-top: 0; color: #b7950b; font-size: 14px; font-weight: 600; }
-        .recipe-book ul { padding-left: 15px; margin: 0; font-size: 11px; color: #444; }
-        .recipe-book li { margin-bottom: 4px; }
+        .recipe-book h3 { margin-top: 0; color: #f57f17; font-size: 16px; font-weight: 700; }
+        .recipe-book ul { padding-left: 15px; margin: 0; font-size: 13px; color: #5d4037; }
+        .recipe-book li { margin-bottom: 6px; line-height: 1.3; }
 
         /* สถานะมุมขวาล่าง */
         .status-panel {
@@ -263,14 +274,14 @@ game_html = """
         }
         .fame-box, .money-box {
             color: white;
-            padding: 6px 12px;
+            padding: 8px 15px;
             font-size: 14px;
             font-weight: 600;
-            border-radius: 6px;
-            box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
-        .fame-box { background: #d4ac0d; }
-        .money-box { background: #27ae60; }
+        .fame-box { background: #ffb74d; }
+        .money-box { background: #81c784; }
     </style>
 </head>
 <body>
@@ -311,12 +322,12 @@ game_html = """
             <div class="top-kitchen-row" style="width: 100%;">
                 <div class="plate-box" id="plateEmojis" title="จานข้าว">🍽️</div>
                 <div class="dish-box">
-                    <strong>วัตถุดิบที่เลือก:</strong> <span id="currentSelection" style="color: #7f8c8d;">- คลิกเลือกวัตถุดิบ (คลิกชื่อเพื่อยกเลิก) -</span><br>
+                    <strong>วัตถุดิบที่เลือก:</strong> <span id="currentSelection" style="color: #a1887f;">- คลิกเลือกวัตถุดิบ -</span><br>
                     <div id="selectedTagsContainer" style="margin-top: 4px;"></div>
                 </div>
             </div>
 
-            <button class="cook-btn" onclick="cookDish()">🔥 COOK </button>
+            <button class="cook-btn" onclick="cookDish()">🔥 COOK</button>
         </div>
 
         <!-- 3. หนังสือสูตรอาหาร (ขวา) -->
@@ -359,6 +370,8 @@ game_html = """
             "หมูกระเทียม": { ingredients: ["หมู", "กระเทียม", "สมุนไพร"], extraPrice: 5 }
         };
 
+        const handwriteClasses = ['handwrite-1', 'handwrite-2', 'handwrite-3', 'handwrite-4'];
+
         let score = 150;
         let fame = 100;
         let isGameOpen = false;
@@ -374,11 +387,11 @@ game_html = """
             const btn = document.getElementById("shopBtn");
             if (isGameOpen) {
                 btn.className = "shop-status-btn open";
-                btn.innerText = "OPEN (เปิดร้านแล้ว)";
+                btn.innerText = "เปิด";
                 if (orders.length === 0) addNewOrder();
             } else {
                 btn.className = "shop-status-btn close";
-                btn.innerText = "CLOSE (ร้านปิด)";
+                btn.innerText = "ปิด";
             }
             updateUI();
         }
@@ -389,7 +402,11 @@ game_html = """
             let selectDishes = [];
             while (selectDishes.length < numDish) {
                 let randomDish = recipeKeys[Math.floor(Math.random() * recipeKeys.length)];
-                if (!selectDishes.includes(randomDish)) selectDishes.push(randomDish);
+                if (!selectDishes.map(d => d.name).includes(randomDish)) {
+                    // สุ่มฟอนต์ลายมือเฉพาะสำหรับแต่ละเมนูของลูกค้า
+                    let fontClass = handwriteClasses[Math.floor(Math.random() * handwriteClasses.length)];
+                    selectDishes.push({ name: randomDish, font: fontClass });
+                }
             }
             return {
                 id: Date.now() + Math.random(),
@@ -447,7 +464,7 @@ game_html = """
 
         function selectIngredient(ing, emoji) {
             if (!isGameOpen) {
-                showCookingAlert("⚠️ กรุณากดเปิดร้าน (OPEN) ก่อนเริ่มทำอาหาร!");
+                showCookingAlert("⚠️ กรุณากดเปิดร้านก่อนเริ่มทำอาหาร!");
                 return;
             }
             selectedIngredients.push(ing);
@@ -493,7 +510,8 @@ game_html = """
 
             if (matchedDish) {
                 const currentOrder = orders[0];
-                if (currentOrder.dishes.includes(matchedDish) && !cookedDishes.includes(matchedDish)) {
+                const orderDishNames = currentOrder.dishes.map(d => d.name);
+                if (orderDishNames.includes(matchedDish) && !cookedDishes.includes(matchedDish)) {
                     cookedDishes.push(matchedDish);
                     showCookingAlert(`✅ ทำเมนู "${matchedDish}" สำเร็จ! (หักต้นทุน ${totalCost} บาท)`);
                 } else {
@@ -516,7 +534,7 @@ game_html = """
 
             let basePrice = numberOfDishes === 1 ? 40 : (numberOfDishes === 2 ? 60 : 75);
             let extraTotal = 0;
-            currentOrder.dishes.forEach(dish => { extraTotal += recipes[dish].extraPrice; });
+            currentOrder.dishes.forEach(dish => { extraTotal += recipes[dish.name].extraPrice; });
 
             let totalPrice = basePrice + extraTotal;
             score += totalPrice;
@@ -546,13 +564,13 @@ game_html = """
 
             let ordersHtml = "";
             orders.forEach((order, index) => {
-                let allDone = order.dishes.every(dish => (index === 0 ? cookedDishes.includes(dish) : false));
+                let allDone = order.dishes.every(dish => (index === 0 ? cookedDishes.includes(dish.name) : false));
                 let percent = (order.timeLeft / order.maxTime) * 100;
 
                 let dishesListHtml = "";
                 order.dishes.forEach(dish => {
-                    let isDone = (index === 0 && cookedDishes.includes(dish));
-                    dishesListHtml += `<li class="order-item ${isDone ? 'done' : ''}">${isDone ? '✔️' : '⭕'} ${dish}</li>`;
+                    let isDone = (index === 0 && cookedDishes.includes(dish.name));
+                    dishesListHtml += `<li class="order-item ${dish.font} ${isDone ? 'done' : ''}">${isDone ? '✔️' : '✏️'} ${dish.name}</li>`;
                 });
 
                 let alertMsg = orderAlerts[order.id] ? `<div class="order-alert">${orderAlerts[order.id]}</div>` : '';
@@ -586,7 +604,7 @@ game_html = """
                 });
                 document.getElementById("currentSelection").innerText = "";
             } else {
-                document.getElementById("currentSelection").innerText = "- คลิกเลือกวัตถุดิบ (คลิกชื่อเพื่อยกเลิก) -";
+                document.getElementById("currentSelection").innerText = "- คลิกเลือกวัตถุดิบ -";
             }
             document.getElementById("plateEmojis").innerHTML = plateEmojiHtml;
             document.getElementById("selectedTagsContainer").innerHTML = tagsHtml;
