@@ -8,11 +8,13 @@ game_html = """
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>ร้านข้าวราดแกงขายฝัน</title>
+    <title>ร้านข้าวราดแกงลุงสมชาย</title>
+    <!-- นำเข้าฟอนต์ Prompt จาก Google Fonts ให้ดูทันสมัยและวัยรุ่นขึ้น -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Sarabun', sans-serif;
-            background-color: #fdfbf7; /* โทนสีครีมละมุนแนวบ้านๆ */
+            font-family: 'Prompt', sans-serif;
+            background-color: #fdfbf7;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -20,24 +22,24 @@ game_html = """
             align-items: center;
         }
 
-        /* กรอบชื่อร้านสไตล์ไทยๆ */
+        /* กรอบชื่อร้านสไตล์ไทยโมเดิร์น */
         .shop-title-box {
             border: 3px solid #d35400;
             background: #fff5e6;
             padding: 8px 30px;
-            border-radius: 8px;
+            border-radius: 12px;
             box-shadow: 3px 3px 0px #b9770e;
             margin-bottom: 12px;
         }
-        h1 { color: #b9770e; margin: 0; font-size: 26px; text-align: center; text-shadow: 1px 1px 0px #fad7a0; }
+        h1 { color: #b9770e; margin: 0; font-size: 26px; font-weight: 700; text-align: center; text-shadow: 1px 1px 0px #fad7a0; }
 
         /* ป้ายเปิด-ปิดทรงสี่เหลี่ยม */
         .shop-status-btn {
             padding: 8px 20px;
             font-size: 15px;
-            font-weight: bold;
+            font-weight: 600;
             border: 2px solid #555;
-            border-radius: 4px; /* ทรงสี่เหลี่ยมขอบมนเล็กน้อย */
+            border-radius: 8px;
             cursor: pointer;
             margin-bottom: 15px;
             box-shadow: 2px 2px 0px #333;
@@ -67,17 +69,17 @@ game_html = """
             border: 2px solid #e67e22;
             padding: 12px;
             box-shadow: 3px 3px 0px rgba(230, 126, 34, 0.3);
-            border-radius: 6px;
+            border-radius: 8px;
             position: relative;
         }
         .order-box.active-box {
             border: 2px solid #d35400;
             background: #fff9e6;
         }
-        .order-box h3 { margin-top: 0; color: #d35400; font-size: 14px; }
+        .order-box h3 { margin-top: 0; color: #d35400; font-size: 14px; font-weight: 600; }
         .order-list { list-style: none; padding: 0; margin: 0 0 10px 0; }
-        .order-item { font-size: 13px; margin-bottom: 4px; color: #555; }
-        .order-item.done { text-decoration: line-through; color: #27ae60; font-weight: bold; }
+        .order-item { font-size: 13px; margin-bottom: 4px; color: #555; font-weight: 400; }
+        .order-item.done { text-decoration: line-through; color: #27ae60; font-weight: 600; }
 
         .timer-bar-container {
             width: 100%;
@@ -102,8 +104,8 @@ game_html = """
             color: #fff;
             border: none;
             font-size: 13px;
-            font-weight: bold;
-            border-radius: 4px;
+            font-weight: 600;
+            border-radius: 6px;
             cursor: not-allowed;
         }
         .serve-btn.active {
@@ -116,7 +118,7 @@ game_html = """
             font-size: 11px;
             color: #c0392b;
             margin-top: 5px;
-            font-weight: bold;
+            font-weight: 600;
             text-align: center;
         }
 
@@ -125,14 +127,14 @@ game_html = """
             flex: 1;
             background: #ffffff;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             border: 2px solid #d5dbdb;
             box-shadow: 0 3px 10px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        .kitchen-area h3 { margin-top: 0; color: #2c3e50; font-size: 15px; }
+        .kitchen-area h3 { margin-top: 0; color: #2c3e50; font-size: 15px; font-weight: 600; }
 
         .top-kitchen-row {
             display: flex;
@@ -142,7 +144,6 @@ game_html = """
             align-items: center;
         }
 
-        /* จานข้าวแสดงอีโมจิวัตถุดิบ */
         .plate-box {
             width: 75px;
             height: 75px;
@@ -163,7 +164,7 @@ game_html = """
             flex: 1;
             background: #f9f9f9;
             padding: 10px;
-            border-radius: 6px;
+            border-radius: 8px;
             border: 1px solid #ddd;
             min-height: 55px;
             font-size: 13px;
@@ -174,8 +175,9 @@ game_html = """
             background: #eafaf1;
             color: #27ae60;
             padding: 6px;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 12px;
+            font-weight: 500;
             text-align: center;
             margin-bottom: 10px;
             border: 1px solid #a9dfbf;
@@ -194,13 +196,15 @@ game_html = """
             background: #2980b9;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 12px;
+            font-weight: 500;
             display: flex;
             flex-direction: column;
             align-items: center;
             box-shadow: 1px 1px 0px #1b4f72;
+            transition: 0.1s;
         }
         .ing-btn:active { transform: translate(1px, 1px); box-shadow: none; }
         .ing-btn span { font-size: 10px; opacity: 0.9; }
@@ -211,40 +215,41 @@ game_html = """
             color: #c0392b;
             padding: 2px 6px;
             margin: 2px;
-            border-radius: 3px;
+            border-radius: 4px;
             cursor: pointer;
             font-size: 11px;
+            font-weight: 500;
             border: 1px solid #f5b7b1;
         }
         .selected-item-tag:hover { text-decoration: line-through; }
 
-        /* ปุ่ม Cook ยืนยันทำอาหาร */
         .cook-btn {
             width: 100%;
             padding: 8px;
             background: #d35400;
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             box-shadow: 2px 2px 0px #935116;
             margin-top: 5px;
+            transition: 0.1s;
         }
         .cook-btn:active { transform: translate(2px, 2px); box-shadow: none; }
 
-        /* 3. สูตรอาหาร (ขวา) */
+        /* 3. หนังสือสูตรอาหาร (ขวา) */
         .recipe-book {
             width: 220px;
             background: #fef9e7;
             border: 2px solid #d4ac0d;
             padding: 12px;
             box-shadow: 3px 3px 0px rgba(212, 172, 13, 0.3);
-            border-radius: 6px;
+            border-radius: 8px;
             height: fit-content;
         }
-        .recipe-book h3 { margin-top: 0; color: #b7950b; font-size: 14px; }
+        .recipe-book h3 { margin-top: 0; color: #b7950b; font-size: 14px; font-weight: 600; }
         .recipe-book ul { padding-left: 15px; margin: 0; font-size: 11px; color: #444; }
         .recipe-book li { margin-bottom: 4px; }
 
@@ -260,8 +265,8 @@ game_html = """
             color: white;
             padding: 6px 12px;
             font-size: 14px;
-            font-weight: bold;
-            border-radius: 4px;
+            font-weight: 600;
+            border-radius: 6px;
             box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
         }
         .fame-box { background: #d4ac0d; }
@@ -281,7 +286,7 @@ game_html = """
 
         <!-- 2. พื้นที่ทำอาหาร (กลาง) -->
         <div class="kitchen-area">
-            <h3>🍳 เลือกวัตถุดิบลงจาน</h3>
+            <h3>🍳 เลือกวัตถุดิบลงจาน (ทำคิวบนสุดก่อน)</h3>
             
             <div class="cooking-alert" id="cookingAlert">แจ้งเตือน</div>
 
@@ -311,12 +316,12 @@ game_html = """
                 </div>
             </div>
 
-            <button class="cook-btn" onclick="cookDish()">🔥 COOK</button>
+            <button class="cook-btn" onclick="cookDish()">🔥 COOK (ยืนยันทำเมนู)</button>
         </div>
 
         <!-- 3. หนังสือสูตรอาหาร (ขวา) -->
         <div class="recipe-book">
-            <h3>📖 สูตรอาหาร</h3>
+            <h3>📖 สมุดสูตรอาหาร</h3>
             <ul>
                 <li><strong>เขียวหวาน:</strong> ไก่+พริกแกง+กะทิ+มะเขือ</li>
                 <li><strong>พะแนง:</strong> หมู+พริกแกง+กะทิ+ใบมะกรูด</li>
@@ -359,21 +364,21 @@ game_html = """
         let isGameOpen = false;
         let orders = [];
         let cookedDishes = [];
-        let selectedIngredients = []; // เก็บชื่อวัตถุดิบ
-        let selectedEmojis = [];      // เก็บอีโมจิสำหรับแสดงในจาน
+        let selectedIngredients = [];
+        let selectedEmojis = [];
         let orderAlerts = {};
-        let nextOrderTimer = 15;      // ตัวนับเวลาสุ่มออเดอร์ถัดไป
+        let nextOrderTimer = 15;
 
         function toggleShopStatus() {
             isGameOpen = !isGameOpen;
             const btn = document.getElementById("shopBtn");
             if (isGameOpen) {
                 btn.className = "shop-status-btn open";
-                btn.innerText = "เปิด";
+                btn.innerText = "OPEN (เปิดร้านแล้ว)";
                 if (orders.length === 0) addNewOrder();
             } else {
                 btn.className = "shop-status-btn close";
-                btn.innerText = "ปิด";
+                btn.innerText = "CLOSE (ร้านปิด)";
             }
             updateUI();
         }
@@ -394,11 +399,9 @@ game_html = """
             };
         }
 
-        // ระบบจับเวลาและสุ่มออเดอร์แบบอิสระ
         setInterval(() => {
             if (!isGameOpen) return;
 
-            // รันเวลาออเดอร์
             orders.forEach(order => { order.timeLeft--; });
 
             if (orders.length > 0) {
@@ -420,12 +423,11 @@ game_html = """
                 }
             }
 
-            // สุ่มเวลาออเดอร์มาใหม่ (ทุกๆ ช่วง 12-25 วินาทีแบบสุ่ม)
             if (orders.length < 2) {
                 nextOrderTimer--;
                 if (nextOrderTimer <= 0) {
                     addNewOrder();
-                    nextOrderTimer = Math.floor(Math.random() * 14) + 12; // สุ่ม 12-25 วินาที
+                    nextOrderTimer = Math.floor(Math.random() * 14) + 12;
                 }
             }
 
@@ -460,7 +462,6 @@ game_html = """
             updateUI();
         }
 
-        // กดปุ่ม COOK เพื่อยืนยันการทำเมนู
         function cookDish() {
             if (!isGameOpen) {
                 showCookingAlert("⚠️ กรุณากดเปิดร้านก่อน!");
@@ -543,7 +544,6 @@ game_html = """
             let starCount = ((fame / 100) * 5).toFixed(1);
             document.getElementById("fameDisplay").innerText = `⭐ ${starCount} (${fame}%)`;
 
-            // อัปเดตรายการออเดอร์
             let ordersHtml = "";
             orders.forEach((order, index) => {
                 let allDone = order.dishes.every(dish => (index === 0 ? cookedDishes.includes(dish) : false));
@@ -577,7 +577,6 @@ game_html = """
             });
             document.getElementById("ordersArea").innerHTML = ordersHtml;
 
-            // แสดงวัตถุดิบและอีโมจิในจาน
             let tagsHtml = "";
             let plateEmojiHtml = "🍽️";
             if (selectedIngredients.length > 0) {
