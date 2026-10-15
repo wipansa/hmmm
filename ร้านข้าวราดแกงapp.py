@@ -1,18 +1,14 @@
-import streamlit as at
+import streamlit as st
 import streamlit.components.v1 as components
 
-# ตั้งค่าหน้าเว็บ Streamlit แสดงผลให้เต็มหน้าจอ
 st.set_page_config(page_title="เกมร้านข้าวราดแกง", layout="wide")
-
-#แสดงผลเกมบน Streamlit
-components.html(game_html, height=800, scrolling=True)
 
 game_html = """
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>ร้านข้าวราดแกงขายฝัน</title>
+    <title>ร้านข้าวราดแกงลุงสมชาย</title>
     <style>
         body {
             font-family: 'Sarabun', sans-serif;
@@ -160,7 +156,7 @@ game_html = """
 </head>
 <body>
 
-    <h1>ร้านข้าวราดแกงขายฝัน</h1>
+    <h1>ร้านข้าวราดแกงลุงสมชาย</h1>
 
     <div class="game-container">
         <div class="orders-area" id="ordersArea"></div>
@@ -412,3 +408,5 @@ game_html = """
 </body>
 </html>
 """
+
+components.html(game_html, height=800, scrolling=True)
