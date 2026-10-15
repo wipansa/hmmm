@@ -7,6 +7,7 @@ st.set_page_config(page_titla="เกมขชร้านข้าวราด�
 #แสดงผลเกมบน Streamlit
 components.html(game_html, height=800, scrolling=True)
 
+game_html = """
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -410,3 +411,4 @@ components.html(game_html, height=800, scrolling=True)
     </script>
 </body>
 </html>
+"""
