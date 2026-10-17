@@ -423,7 +423,7 @@ game_html = """
             border: 3px solid #8d6e63;
             border-radius: 16px;
             padding: 20px 28px;
-            width: 360px;
+            width: 520px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             font-family: 'Prompt', sans-serif;
         }
@@ -446,28 +446,47 @@ game_html = """
             border-bottom: none;
         }
 
+        /* หน้าต่างร้านค้าแบบสเกตช์ */
         .shop-items-list {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            max-height: 280px;
+            max-height: 380px;
             overflow-y: auto;
             margin-bottom: 12px;
+            padding-right: 5px;
         }
-        .shop-item {
+        .shop-category-card {
+            background: #fffdf9;
+            border: 2px solid #8d6e63;
+            border-radius: 12px;
+            padding: 10px 14px;
+            position: relative;
+        }
+        .shop-category-card.locked {
+            background: #e0e0e0;
+            border-color: #9e9e9e;
+            color: #616161;
+        }
+        .shop-category-card.locked .lock-overlay-text {
+            font-size: 13px;
+            font-weight: 700;
+            color: #424242;
+        }
+        .shop-cat-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #fdfbf7;
-            border: 1px solid #e0d7c6;
-            padding: 8px 12px;
-            border-radius: 8px;
+            border-bottom: 1px dashed #bcaaa4;
+            padding-bottom: 5px;
+            margin-bottom: 6px;
         }
-        .shop-item-info strong { display: block; font-size: 13px; color: #4e342e; }
-        .shop-item-info span { font-size: 10px; color: #8d6e63; }
-        .buy-btn {
-            padding: 5px 12px;
-            font-size: 11px;
+        .shop-cat-title { font-size: 15px; font-weight: 700; color: #5d4037; }
+        .shop-cat-unlock-info { font-size: 12px; color: #d84315; font-weight: 600; }
+        .shop-subitems { font-size: 12px; color: #6d4c41; line-height: 1.4; }
+        .buy-category-btn {
+            padding: 6px 14px;
+            font-size: 12px;
             font-weight: 600;
             border: none;
             border-radius: 6px;
@@ -475,15 +494,15 @@ game_html = """
             background: #81c784;
             color: #1b5e20;
         }
-        .buy-btn:disabled {
-            background: #e0e0e0;
-            color: #9e9e9e;
+        .buy-category-btn:disabled {
+            background: #bdbdbd;
+            color: #616161;
             cursor: not-allowed;
         }
 
         .close-modal-btn {
             width: 100%;
-            padding: 7px;
+            padding: 8px;
             background: #8d6e63;
             color: white;
             border: none;
@@ -529,15 +548,15 @@ game_html = """
             <div class="cooking-alert" id="cookingAlert">แจ้งเตือน</div>
 
             <div class="ing-tabs">
-                <button class="tab-btn active" onclick="switchTab('food')">🍚 ข้าวแกง</button>
-                <button class="tab-btn" onclick="switchTab('drink')">🥤 เครื่องดื่ม</button>
-                <button class="tab-btn" onclick="switchTab('dessert')">🍰 ขนมหวาน</button>
+                <button class="tab-btn active" id="tab-food" onclick="switchTab('food')">🍚 ข้าวแกง</button>
+                <button class="tab-btn" id="tab-drink" onclick="switchTab('drink')">🥤 เครื่องดื่ม</button>
+                <button class="tab-btn" id="tab-dessert" onclick="switchTab('dessert')">🍰 ขนมหวาน</button>
             </div>
 
             <div class="ingredients-grid" id="ingredientsGrid"></div>
 
             <div class="top-kitchen-row" style="width: 100%;">
-                <div class="plate-box" id="plateBox" title="จานข้าว">
+                <div class="plate-box" id="plateBox" title="จาน/แก้ว">
                     <div class="smoke-effect" id="smokeEffect">♨️</div>
                     <span id="plateEmojis">🍽️</span>
                 </div>
@@ -552,7 +571,7 @@ game_html = """
 
         <!-- 3. หนังสือสูตรอาหาร (ขวา) -->
         <div class="recipe-book">
-            <h3>📖 สมุดสูตรอาหาร</h3>
+            <h3 id="recipeTitle">📖 สูตรข้าวแกง</h3>
             <ul id="recipeList"></ul>
         </div>
 
@@ -566,7 +585,7 @@ game_html = """
 
     <!-- Modal สรุปยอด -->
     <div class="modal-overlay" id="summaryModal">
-        <div class="modal-card">
+        <div class="modal-card" style="width:360px;">
             <h2>📊 สรุปยอดขายวันนี้</h2>
             <div class="summary-row"><span>รายได้ทั้งหมด:</span><span id="sumRevenue">0 บาท</span></div>
             <div class="summary-row"><span>ค่าวัตถุดิบ:</span><span id="sumCosts">0 บาท</span></div>
@@ -577,10 +596,10 @@ game_html = """
         </div>
     </div>
 
-    <!-- Modal ร้านค้า -->
+    <!-- Modal ร้านค้าสไตล์สเกตช์ 8 หัวข้อ -->
     <div class="modal-overlay" id="shopModal">
         <div class="modal-card">
-            <h2>🛒 ร้านค้าอุปกรณ์ & ปลดล็อก</h2>
+            <h2>🛒 ร้านค้าอุปกรณ์ & ปลดล็อก (8 หมวด)</h2>
             <div class="shop-items-list" id="shopItemsList"></div>
             <button class="close-modal-btn" onclick="closeModal('shopModal')">ปิดหน้าต่าง</button>
         </div>
@@ -634,18 +653,77 @@ game_html = """
             { level: 10, name: "ตำนานข้าวแกงลุงสมชาย", exp: 3200 }
         ];
 
-        let shopUpgrades = [
-            { id: 'cooler', name: '🧊 ตู้แช่น้ำเย็น', price: 150, reqLevel: 2, desc: 'ปลดล็อก: น้ำเย็น, น้ำส้ม', unlocked: false },
-            { id: 'fridge', name: '🥤 ตู้แช่เครื่องดื่มกระป๋อง', price: 300, reqLevel: 3, desc: 'ปลดล็อก: โค้ก, น้ำแดง, น้ำเขียว', unlocked: false },
-            { id: 'juice_bar', name: '🥥 ซุ้มน้ำผลไม้สด', price: 500, reqLevel: 4, desc: 'ปลดล็อก: น้ำมะพร้าวสด', unlocked: false },
-            { id: 'coffee_machine', name: '☕ เครื่องชงกาแฟโบราณ', price: 800, reqLevel: 5, desc: 'ปลดล็อก: เมล็ดกาแฟ, นมข้น', unlocked: false },
-            { id: 'bar_fridge', name: '🍺 ตู้แช่เครื่องดื่มสายดื่ม', price: 1200, reqLevel: 6, desc: 'ปลดล็อก: เบียร์เย็น (ทิปหนัก)', unlocked: false },
-            { id: 'dessert_case', name: '🍰 ตู้โชว์เบเกอรี & ขนมหวาน', price: 1800, reqLevel: 7, desc: 'ปลดล็อก: ขนมหวานทานเล่น', unlocked: false },
-            { id: 'shaved_ice', name: '❄️ เครื่องทำน้ำแข็งไส', price: 3500, reqLevel: 8, desc: 'ปลดล็อก: เมนูน้ำแข็งไส', unlocked: false },
-            { id: 'neon_sign', name: '✨ ป้ายร้านไฟนีออนวินเทจ', price: 5000, reqLevel: 10, desc: 'เพิ่มเงินและดาวความนิยม 1.5 เท่า', unlocked: false }
+        // 8 หัวข้อร้านค้าตามสเกตช์
+        let shopCategories = [
+            {
+                id: 'cooler',
+                title: '1. ตู้แช่น้ำเย็น',
+                price: 150,
+                reqLevel: 2,
+                itemsDesc: '• น้ำเปล่า (ขาย 10฿) | • น้ำแข็งเปล่า (ขาย 5฿)',
+                unlocked: false
+            },
+            {
+                id: 'fridge',
+                title: '2. ตู้แช่เครื่องดื่มกระป๋อง/ขวด',
+                price: 300,
+                reqLevel: 3,
+                itemsDesc: '• โค้ก (ขาย 25฿) | • เป๊ปซี่ (ขาย 25฿)<br>• น้ำแดง (ขาย 20฿) | • น้ำเขียว (ขาย 20฿)',
+                unlocked: false
+            },
+            {
+                id: 'fruit_bar',
+                title: '3. ซุ้มผลไม้สด',
+                price: 500,
+                reqLevel: 4,
+                itemsDesc: '• น้ำมะพร้าว (ขาย 40฿) | • น้ำส้ม (ขาย 30฿)<br>• น้ำสับปะรด (ขาย 30฿) | • น้ำแอปเปิ้ล (ขาย 35฿)<br>• น้ำแตงโม (ขาย 25฿)',
+                unlocked: false
+            },
+            {
+                id: 'coffee_machine',
+                title: '4. เครื่องชงกาแฟสด & ชา',
+                price: 800,
+                reqLevel: 5,
+                itemsDesc: '• เอสเพรสโซ (45฿) | • ลาเต้ (55฿) | • คาปูชิโน่ (55฿)<br>• มอคค่า (60฿) | • มัคิอาโต้ (60฿) | • มัจฉะ (65฿)<br>• มัจฉะลาเต้ (75฿)',
+                unlocked: false
+            },
+            {
+                id: 'bar_fridge',
+                title: '5. ตู้แช่เครื่องดื่มสายดื่ม',
+                price: 1200,
+                reqLevel: 6,
+                itemsDesc: '• เบียร์ขวด ยี่ห้อ A (75฿) | • เบียร์ขวด ยี่ห้อ B (75฿)<br>• เบียร์กระป๋อง ยี่ห้อ A (65฿) | • เบียร์กระป๋อง ยี่ห้อ B (65฿)',
+                unlocked: false
+            },
+            {
+                id: 'dessert_case',
+                title: '6. ตู้ขนมหวาน & เบเกอรี',
+                price: 1800,
+                reqLevel: 7,
+                itemsDesc: '• เค้กหน้านิ่ม (50฿) | • บราวนี่ (55฿) | • ฮันนีโทสต์ (65฿)',
+                unlocked: false
+            },
+            {
+                id: 'shaved_ice',
+                title: '7. เครื่องทำน้ำแข็งไส',
+                price: 2500,
+                reqLevel: 8,
+                itemsDesc: '• น้ำแข็งไสหวานเย็น (ขาย 35฿)<br>ท็อปปิ้ง: น้ำแดง, น้ำเขียวเฮลบลูบอย, เฉาก๊วย, ลูกชิด, เยลลี่, ขนมปังกรอบ',
+                unlocked: false
+            },
+            {
+                id: 'decorations',
+                title: '8. อุปกรณ์ตกแต่งร้าน',
+                price: 3500,
+                reqLevel: 10,
+                itemsDesc: '• รูปภาพประดับฝาผนัง | • ป้ายไฟนีออน<br>• ต้นไม้ประดับ | • อัพเกรดโต๊ะนั่งทาน<br>✨ (บัฟเพิ่มเงินและดาวความนิยม 1.5x)',
+                unlocked: false
+            }
         ];
 
+        // วัตถุดิบแยกหมวด
         const allIngredients = {
+            // --- ข้าวแกง ---
             "ไก่": { cost: 12, emoji: "🍗", category: "food" },
             "หมู": { cost: 15, emoji: "🥩", category: "food" },
             "กุ้ง": { cost: 25, emoji: "🦐", category: "food" },
@@ -662,21 +740,46 @@ game_html = """
             "ไข่": { cost: 6, emoji: "🥚", category: "food" },
             "เต้าหู้": { cost: 8, emoji: "🟡", category: "food" },
             
-            "น้ำเย็น": { cost: 0, emoji: "🧊", category: "drink", reqItem: "cooler" },
-            "น้ำส้ม": { cost: 10, emoji: "🍊", category: "drink", reqItem: "cooler" },
+            // --- เครื่องดื่ม (ตู้เย็น, ซุ้มผลไม้, กาแฟ, เบียร์) ---
+            "น้ำเปล่า": { cost: 3, emoji: "🥛", category: "drink", reqItem: "cooler" },
+            "น้ำแข็ง": { cost: 2, emoji: "🧊", category: "drink", reqItem: "cooler" },
+            
             "โค้ก": { cost: 12, emoji: "🥤", category: "drink", reqItem: "fridge" },
-            "น้ำแดง": { cost: 10, emoji: "🔴", category: "drink", reqItem: "fridge" },
-            "น้ำเขียว": { cost: 10, emoji: "🟢", category: "drink", reqItem: "fridge" },
-            "น้ำมะพร้าว": { cost: 18, emoji: "🥥", category: "drink", reqItem: "juice_bar" },
-            "เมล็ดกาแฟ": { cost: 12, emoji: "☕", category: "drink", reqItem: "coffee_machine" },
-            "นมข้น": { cost: 8, emoji: "🥛", category: "drink", reqItem: "coffee_machine" },
-            "เบียร์": { cost: 35, emoji: "🍺", category: "drink", reqItem: "bar_fridge" },
+            "เป๊ปซี่": { cost: 12, emoji: "🥤", category: "drink", reqItem: "fridge" },
+            "น้ำแดง": { cost: 8, emoji: "🔴", category: "drink", reqItem: "fridge" },
+            "น้ำเขียว": { cost: 8, emoji: "🟢", category: "drink", reqItem: "fridge" },
 
-            "เค้ก": { cost: 25, emoji: "🍰", category: "dessert", reqItem: "dessert_case" },
-            "น้ำแข็งไส": { cost: 15, emoji: "🍧", category: "dessert", reqItem: "shaved_ice" }
+            "น้ำมะพร้าว": { cost: 18, emoji: "🥥", category: "drink", reqItem: "fruit_bar" },
+            "น้ำส้ม": { cost: 12, emoji: "🍊", category: "drink", reqItem: "fruit_bar" },
+            "น้ำสับปะรด": { cost: 12, emoji: "🍍", category: "drink", reqItem: "fruit_bar" },
+            "น้ำแอปเปิ้ล": { cost: 15, emoji: "🍎", category: "drink", reqItem: "fruit_bar" },
+            "น้ำแตงโม": { cost: 10, emoji: "🍉", category: "drink", reqItem: "fruit_bar" },
+
+            "เมล็ดกาแฟ": { cost: 10, emoji: "🫘", category: "drink", reqItem: "coffee_machine" },
+            "ผงมัทฉะ": { cost: 15, emoji: "🍵", category: "drink", reqItem: "coffee_machine" },
+            "นมสด": { cost: 8, emoji: "🥛", category: "drink", reqItem: "coffee_machine" },
+            "ซอสช็อกโกแลต": { cost: 6, emoji: "🍫", category: "drink", reqItem: "coffee_machine" },
+
+            "เบียร์ขวดA": { cost: 35, emoji: "🍾", category: "drink", reqItem: "bar_fridge" },
+            "เบียร์ขวดB": { cost: 35, emoji: "🍾", category: "drink", reqItem: "bar_fridge" },
+            "เบียร์กระป๋องA": { cost: 30, emoji: "🍺", category: "drink", reqItem: "bar_fridge" },
+            "เบียร์กระป๋องB": { cost: 30, emoji: "🍺", category: "drink", reqItem: "bar_fridge" },
+
+            // --- ขนมหวาน & น้ำแข็งไส ---
+            "เค้กหน้านิ่ม": { cost: 20, emoji: "🍰", category: "dessert", reqItem: "dessert_case" },
+            "บราวนี่": { cost: 22, emoji: "🍫", category: "dessert", reqItem: "dessert_case" },
+            "ฮันนีโทสต์": { cost: 25, emoji: "🍞", category: "dessert", reqItem: "dessert_case" },
+
+            "เฮลบลูบอย": { cost: 5, emoji: "🍧", category: "dessert", reqItem: "shaved_ice" },
+            "เฉาก๊วย": { cost: 4, emoji: "⬛", category: "dessert", reqItem: "shaved_ice" },
+            "ลูกชิด": { cost: 4, emoji: "⚪", category: "dessert", reqItem: "shaved_ice" },
+            "เยลลี่": { cost: 4, emoji: "🍬", category: "dessert", reqItem: "shaved_ice" },
+            "ขนมปังกรอบ": { cost: 3, emoji: "🍞", category: "dessert", reqItem: "shaved_ice" }
         };
 
+        // สูตรอาหารทั้งหมด
         const recipes = {
+            // ข้าวแกง
             "แกงเขียวหวาน": { ingredients: ["ไก่", "พริกแกง", "กะทิ", "มะเขือเปราะ"], extraPrice: 5, type: "food" },
             "พะแนง": { ingredients: ["หมู", "พริกแกง", "กะทิ", "ใบมะกรูด"], extraPrice: 5, type: "food" },
             "ต้มยำกุ้ง": { ingredients: ["กุ้ง", "น้ำซุป", "เห็ด", "สมุนไพร"], extraPrice: 15, type: "food" },
@@ -686,16 +789,32 @@ game_html = """
             "ผัดพริกแกง": { ingredients: ["หมู", "พริกแกง", "ใบมะกรูด"], extraPrice: 0, type: "food" },
             "หมูกระเทียม": { ingredients: ["หมู", "กระเทียม", "สมุนไพร"], extraPrice: 5, type: "food" },
             
-            "กาแฟเย็น": { ingredients: ["เมล็ดกาแฟ", "นมข้น"], extraPrice: 20, type: "drink" },
-            "โอเลี้ยง": { ingredients: ["เมล็ดกาแฟ"], extraPrice: 15, type: "drink" },
-            "น้ำส้มคั้น": { ingredients: ["น้ำส้ม"], extraPrice: 15, type: "drink" },
-            "โค้กเย็น": { ingredients: ["โค้ก"], extraPrice: 18, type: "drink" },
-            "น้ำแดงโซดา": { ingredients: ["น้ำแดง"], extraPrice: 15, type: "drink" },
-            "น้ำเขียวโซดา": { ingredients: ["น้ำเขียว"], extraPrice: 15, type: "drink" },
-            "น้ำมะพร้าวสด": { ingredients: ["น้ำมะพร้าว"], extraPrice: 25, type: "drink" },
-            "เบียร์เย็น": { ingredients: ["เบียร์"], extraPrice: 45, type: "drink" },
-            "เค้กโฮมเมด": { ingredients: ["เค้ก"], extraPrice: 30, type: "dessert" },
-            "น้ำแข็งไสหวานเย็น": { ingredients: ["น้ำแข็งไส"], extraPrice: 25, type: "dessert" }
+            // เครื่องดื่ม
+            "น้ำเปล่าเย็น": { ingredients: ["น้ำเปล่า", "น้ำแข็ง"], extraPrice: 7, type: "drink" },
+            "โค้กแช่เย็น": { ingredients: ["โค้ก"], extraPrice: 13, type: "drink" },
+            "เป๊ปซี่เย็น": { ingredients: ["เป๊ปซี่"], extraPrice: 13, type: "drink" },
+            "น้ำแดงโซดา": { ingredients: ["น้ำแดง"], extraPrice: 12, type: "drink" },
+            "น้ำเขียวโซดา": { ingredients: ["น้ำเขียว"], extraPrice: 12, type: "drink" },
+            "น้ำมะพร้าวสด": { ingredients: ["น้ำมะพร้าว"], extraPrice: 22, type: "drink" },
+            "น้ำส้มคั้น": { ingredients: ["น้ำส้ม"], extraPrice: 18, type: "drink" },
+            
+            // กาแฟ & ชา
+            "เอสเพรสโซ": { ingredients: ["เมล็ดกาแฟ"], extraPrice: 35, type: "drink" },
+            "ลาเต้": { ingredients: ["เมล็ดกาแฟ", "นมสด", "น้ำแข็ง"], extraPrice: 35, type: "drink" },
+            "คาปูชิโน่": { ingredients: ["เมล็ดกาแฟ", "นมสด"], extraPrice: 37, type: "drink" },
+            "มอคค่า": { ingredients: ["เมล็ดกาแฟ", "นมสด", "ซอสช็อกโกแลต"], extraPrice: 36, type: "drink" },
+            "มัคิอาโต้": { ingredients: ["เมล็ดกาแฟ", "นมสด"], extraPrice: 42, type: "drink" },
+            "มัจฉะ": { ingredients: ["ผงมัทฉะ"], extraPrice: 50, type: "drink" },
+            "มัจฉะลาเต้": { ingredients: ["ผงมัทฉะ", "นมสด"], extraPrice: 52, type: "drink" },
+            
+            "เบียร์ขวด A": { ingredients: ["เบียร์ขวดA"], extraPrice: 40, type: "drink" },
+            "เบียร์กระป๋อง A": { ingredients: ["เบียร์กระป๋องA"], extraPrice: 35, type: "drink" },
+
+            // ขนมหวาน
+            "เค้กหน้านิ่ม": { ingredients: ["เค้กหน้านิ่ม"], extraPrice: 30, type: "dessert" },
+            "บราวนี่ฉ่ำ": { ingredients: ["บราวนี่"], extraPrice: 33, type: "dessert" },
+            "ฮันนีโทสต์": { ingredients: ["ฮันนีโทสต์"], extraPrice: 40, type: "dessert" },
+            "น้ำแข็งไสทรงเครื่อง": { ingredients: ["เฮลบลูบอย", "เฉาก๊วย", "ลูกชิด", "ขนมปังกรอบ"], extraPrice: 23, type: "dessert" }
         };
 
         const handwriteClasses = ['handwrite-1', 'handwrite-2', 'handwrite-3', 'handwrite-4'];
@@ -721,7 +840,6 @@ game_html = """
         let dailyCosts = 0;
         let dailyServedCount = 0;
 
-        // ตรวจสอบข้อมูลเซฟเดิมเมื่อโหลดหน้า
         window.onload = function() {
             let savedUser = localStorage.getItem("somchai_last_user");
             if (savedUser) {
@@ -731,10 +849,7 @@ game_html = """
 
         function handleLogin() {
             let name = document.getElementById("usernameInput").value.trim();
-            if (!name) {
-                alert("กรุณากรอกชื่อผู้เล่นก่อนครับ!");
-                return;
-            }
+            if (!name) { alert("กรุณากรอกชื่อผู้เล่นก่อนครับ!"); return; }
             currentUser = name;
             localStorage.setItem("somchai_last_user", currentUser);
             document.getElementById("playerTagDisplay").innerText = `👤 ${currentUser}`;
@@ -753,20 +868,15 @@ game_html = """
             }
         }
 
-        // ระบบบันทึกข้อมูลลง localStorage
         function saveGameData() {
             if (!currentUser) return;
             let saveData = {
-                score: score,
-                fame: fame,
-                exp: exp,
-                level: level,
-                upgrades: shopUpgrades.map(u => ({ id: u.id, unlocked: u.unlocked }))
+                score: score, fame: fame, exp: exp, level: level,
+                categories: shopCategories.map(c => ({ id: c.id, unlocked: c.unlocked }))
             };
             localStorage.setItem("somchai_save_" + currentUser, JSON.stringify(saveData));
         }
 
-        // โหลดข้อมูลจาก localStorage
         function loadGameData() {
             let saved = localStorage.getItem("somchai_save_" + currentUser);
             if (saved) {
@@ -776,28 +886,30 @@ game_html = """
                     fame = data.fame ?? 100;
                     exp = data.exp ?? 0;
                     level = data.level ?? 1;
-                    if (data.upgrades) {
-                        data.upgrades.forEach(savedItem => {
-                            let item = shopUpgrades.find(u => u.id === savedItem.id);
-                            if (item) item.unlocked = savedItem.unlocked;
+                    if (data.categories) {
+                        data.categories.forEach(savedCat => {
+                            let item = shopCategories.find(c => c.id === savedCat.id);
+                            if (item) item.unlocked = savedCat.unlocked;
                         });
                     }
                 } catch(e) { console.error("Load save error", e); }
             }
         }
 
+        // สลับ Tab และอัปเดตสมุดสูตรขวาบน
         function switchTab(tab) {
             currentTab = tab;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
             renderIngredients();
+            renderRecipeBook();
         }
 
         function renderIngredients() {
             let html = "";
             for (let [name, data] of Object.entries(allIngredients)) {
                 if (data.category === currentTab) {
-                    let isUnlocked = !data.reqItem || shopUpgrades.find(u => u.id === data.reqItem)?.unlocked;
+                    let isUnlocked = !data.reqItem || shopCategories.find(c => c.id === data.reqItem)?.unlocked;
                     if (isUnlocked) {
                         html += `
                             <button class="ing-btn" onclick="selectIngredient('${name}', '${data.emoji}')">
@@ -808,21 +920,29 @@ game_html = """
                 }
             }
             if (html === "") {
-                html = `<div style="grid-column: span 3; text-align:center; font-size:12px; color:#8d6e63; padding:15px;">🔒 ต้องซื้ออุปกรณ์จากร้านค้าเพื่อปลดล็อกหมวดนี้</div>`;
+                html = `<div style="grid-column: span 3; text-align:center; font-size:12px; color:#8d6e63; padding:15px;">🔒 ต้องปลดล็อกอุปกรณ์ในร้านค้าก่อน</div>`;
             }
             document.getElementById("ingredientsGrid").innerHTML = html;
         }
 
         function renderRecipeBook() {
+            let titleText = currentTab === "food" ? "📖 สูตรข้าวแกง" : (currentTab === "drink" ? "☕ สูตรเครื่องดื่ม & กาแฟ" : "🍰 สูตรขนมหวาน & น้ำแข็งไส");
+            document.getElementById("recipeTitle").innerText = titleText;
+
             let html = "";
             for (let [name, data] of Object.entries(recipes)) {
-                let allIngUnlocked = data.ingredients.every(ing => {
-                    let req = allIngredients[ing]?.reqItem;
-                    return !req || shopUpgrades.find(u => u.id === req)?.unlocked;
-                });
-                if (allIngUnlocked) {
-                    html += `<li><strong>${name}:</strong> ${data.ingredients.join(' + ')}</li>`;
+                if (data.type === currentTab) {
+                    let allIngUnlocked = data.ingredients.every(ing => {
+                        let req = allIngredients[ing]?.reqItem;
+                        return !req || shopCategories.find(c => c.id === req)?.unlocked;
+                    });
+                    if (allIngUnlocked) {
+                        html += `<li><strong>${name}:</strong> ${data.ingredients.join(' + ')}</li>`;
+                    }
                 }
+            }
+            if (html === "") {
+                html = `<li style="color:#8d6e63;">- ยังไม่มีสูตรที่ปลดล็อก -</li>`;
             }
             document.getElementById("recipeList").innerHTML = html;
         }
@@ -840,7 +960,7 @@ game_html = """
             } else {
                 btn.className = "btn-main btn-shop-status close";
                 btn.innerText = "CLOSE (ร้านปิด)";
-                saveGameData(); // เซฟเกมอัตโนมัติเมื่อปิดร้าน
+                saveGameData();
                 showSummaryModal();
             }
             updateUI();
@@ -858,7 +978,7 @@ game_html = """
             let availableRecipes = Object.keys(recipes).filter(name => {
                 return recipes[name].ingredients.every(ing => {
                     let req = allIngredients[ing]?.reqItem;
-                    return !req || shopUpgrades.find(u => u.id === req)?.unlocked;
+                    return !req || shopCategories.find(c => c.id === req)?.unlocked;
                 });
             });
 
@@ -1000,8 +1120,8 @@ game_html = """
             let extraTotal = 0;
             currentOrder.dishes.forEach(dish => { extraTotal += recipes[dish.name].extraPrice; });
 
-            let hasNeonBuff = shopUpgrades.find(u => u.id === 'neon_sign')?.unlocked;
-            let priceMultiplier = hasNeonBuff ? 1.5 : 1.0;
+            let hasDecorBuff = shopCategories.find(c => c.id === 'decorations')?.unlocked;
+            let priceMultiplier = hasDecorBuff ? 1.5 : 1.0;
 
             let totalPrice = Math.round((basePrice + extraTotal) * priceMultiplier);
             score += totalPrice;
@@ -1017,7 +1137,7 @@ game_html = """
             setTimeout(() => { delete orderAlerts[currentOrder.id]; }, 4000);
 
             removeOrder(0);
-            saveGameData(); // เซฟเกมอัตโนมัติหลังเสิร์ฟ
+            saveGameData();
             updateUI();
         }
 
@@ -1030,32 +1150,51 @@ game_html = """
             }
         }
 
+        // แสดงหน้าต่างร้านค้าตามสเกตช์ 8 หัวข้อ
         function openShopModal() {
             let html = "";
-            shopUpgrades.forEach(item => {
-                let canBuy = level >= item.reqLevel && score >= item.price && !item.unlocked;
-                let btnText = item.unlocked ? "✅ ซื้อแล้ว" : (level < item.reqLevel ? `🔒 ต้อง Lv.${item.reqLevel}` : `ซื้อ (${item.price}บ.)`);
-                html += `
-                    <div class="shop-item">
-                        <div class="shop-item-info">
-                            <strong>${item.name}</strong>
-                            <span>${item.desc}</span>
+            shopCategories.forEach(cat => {
+                let isUnlocked = cat.unlocked;
+                let canBuy = level >= cat.reqLevel && score >= cat.price && !isUnlocked;
+
+                if (isUnlocked) {
+                    html += `
+                        <div class="shop-category-card">
+                            <div class="shop-cat-header">
+                                <span class="shop-cat-title">${cat.title}</span>
+                                <span style="color:#2e7d32; font-weight:bold; font-size:12px;">✅ ปลดล็อกแล้ว</span>
+                            </div>
+                            <div class="shop-subitems">${cat.itemsDesc}</div>
                         </div>
-                        <button class="buy-btn" ${!canBuy ? 'disabled' : ''} onclick="buyUpgrade('${item.id}')">${btnText}</button>
-                    </div>
-                `;
+                    `;
+                } else {
+                    html += `
+                        <div class="shop-category-card locked">
+                            <div class="shop-cat-header">
+                                <span class="shop-cat-title">${cat.title}</span>
+                                <button class="buy-category-btn" ${!canBuy ? 'disabled' : ''} onclick="buyCategory('${cat.id}')">
+                                    ซื้อ (${cat.price}฿)
+                                </button>
+                            </div>
+                            <div class="lock-overlay-text">
+                                🔒 ต้องใช้ Lv.${cat.reqLevel} - ${cat.price}฿ (สิ่งที่จะซื้อ)
+                            </div>
+                            <div class="shop-subitems" style="margin-top:4px; opacity:0.8;">${cat.itemsDesc}</div>
+                        </div>
+                    `;
+                }
             });
             document.getElementById("shopItemsList").innerHTML = html;
             document.getElementById("shopModal").style.display = "flex";
         }
 
-        function buyUpgrade(id) {
-            let item = shopUpgrades.find(u => u.id === id);
-            if (item && score >= item.price && !item.unlocked) {
-                score -= item.price;
-                item.unlocked = true;
+        function buyCategory(id) {
+            let cat = shopCategories.find(c => c.id === id);
+            if (cat && score >= cat.price && !cat.unlocked) {
+                score -= cat.price;
+                cat.unlocked = true;
                 playSound('serve');
-                saveGameData(); // เซฟหลังซื้ออุปกรณ์
+                saveGameData();
                 openShopModal();
                 renderIngredients();
                 renderRecipeBook();
@@ -1146,6 +1285,3 @@ game_html = """
     </script>
 </body>
 </html>
-"""
-
-components.html(game_html, height=880, scrolling=True)
